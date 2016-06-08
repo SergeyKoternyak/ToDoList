@@ -8,7 +8,6 @@ class Note{
 		this.isDone = false;
 	}
 }
-
 // Конструктор массива
 class NotesArchive extends Array{
 	constructor(){
@@ -73,6 +72,18 @@ class NotesArchive extends Array{
 			}
 		});
 	}
+	overlapNote(note){
+		let noteTitleVal = note ? $(note).find('h1').text() : $('.note-title').val();
+		let noteBodyVal = note ? $(note).find('p').text() : $('.note-body').val();
+
+		for (let i = 0; i < this.length; i++) {
+			if(this[i].title === noteTitleVal && this[i].text === noteBodyVal){
+				if(!confirm('Такая заметка уже существует, все равно добавить?')) return false
+				break
+			}
+		};
+		return true
+	}
 }
 
 // Конструктор приложения
@@ -112,8 +123,10 @@ class toDoApp{
 			let title = $('.note-title').val();
 			let text = $('.note-body').val();
 			let note = new Note(title, text, this.getDate());
-			this.myNotes.push(note);
-			this.visibilityButtons();
+			if(this.myNotes.overlapNote()){
+				this.myNotes.push(note);
+				this.visibilityButtons();
+			}
 		});
 		// Действия с заметками
 		$('.output').on('click', e=>{
@@ -140,8 +153,10 @@ class toDoApp{
 			}
 			// Сохранение редактирования
 			if($(e.target).hasClass('save')){
-				note.removeClass('edit-mod');
-				this.myNotes.saveEdit(num, note, this.getDate());
+				if(this.myNotes.overlapNote(note)){
+					note.removeClass('edit-mod');
+					this.myNotes.saveEdit(num, note, this.getDate())
+				}
 			}
 		});
 		// Удалить все выполненные заметки
