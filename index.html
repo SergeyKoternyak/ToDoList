@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+	<div class="container">
+		<div class="list-head"></div>
+		<div class="note-create note-style">
+			<input type="text" class="note-title" placeholder="Enter title">
+			<textarea class="note-body" placeholder="Enter text note"></textarea>
+			<div class="buttons control">
+				<div class="add button">+Add task</div>
+				<div class="hide-show button">Show done</div>
+				<div class="delete-done button">Delete done</div>
+				<div class="delete-all button">Delete all</div>
+			</div>
+			<input type="text" class="search" placeholder="⌕ Search">
+		</div>
+		<ul class="output hide"></ul>
+	</div>
+	<!-- Шаблон -->
+	<script id="template" type="text/template">
+		<li class="second-note note-style <%= (isDone) ? 'ready' : '' %>">
+			<h1 class="note-title" contenteditable="false"><%= title %></h1>
+			<p class="note-body" contenteditable="false"><%= text %></p>
+			<div class="buttons">
+				<div class="done button"><%= (isDone) ? 'Undone' : 'Done' %></div>
+				<div class="edit button">Edit</div>
+				<div class="delete button">Delete</div>
+				<div class="save button">Save</div>
+			</div>
+			<div class="date"><%= date %></div>
+		</li>
+	</script>
+	<!-- Скрипты -->
+	<script src="node_modules/jquery/dist/jquery.js"></script>
+	<script src='node_modules/lodash/lodash.js'></script>
+	<script src="js/script.js"></script>
+</body>
+</html>
