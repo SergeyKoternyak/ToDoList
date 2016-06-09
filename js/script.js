@@ -61,27 +61,33 @@ class NotesArchive extends Array{
 	}
 	searchNotes(){
 		$($('li')).each((i, el)=>{
-			$(el).addClass('hide-search');
+			$(el).addClass('hide-el');
 			if($('.search').val() === ''){
-				$(el).removeClass('hide-search');
+				$(el).removeClass('hide-el');
 			}
 		});
 		$(this).each((i, el)=>{
 			if(el.title === $('.search').val()){
-				$($('li')[i]).removeClass('hide-search');
+				$($('li')[i]).removeClass('hide-el');
 			}
 		});
 	}
 	overlapNote(note){
 		let noteTitleVal = note ? $(note).find('h1').text() : $('.note-title').val();
 		let noteBodyVal = note ? $(note).find('p').text() : $('.note-body').val();
-
-		for (let i = 0; i < this.length; i++) {
-			if(this[i].title === noteTitleVal && this[i].text === noteBodyVal){
-				if(!confirm('Такая заметка уже существует, все равно добавить?')) return false
-				break
+		// Проверка полей ввода
+		if (noteTitleVal.length > 0 && noteBodyVal.length > 0){
+			// Проверка совпадения заметок
+			for (let i = 0; i < this.length; i++) {
+				if(this[i].title === noteTitleVal && this[i].text === noteBodyVal){
+					if(!confirm('Такая заметка уже существует, все равно добавить?')) return false
+					break
+				}
 			}
-		};
+		} else{
+			alert('Введите заголовок и текст заметки')
+			return false
+		}
 		return true
 	}
 }
@@ -96,7 +102,7 @@ class toDoApp{
 	};
 	visibilityButtons(){
 		$('.delete-all, .delete-done').addClass('not-available');
-		$('.hide-show').addClass('hide-button');
+		$('.hide-show').addClass('hide-el');
 
 		$(this.myNotes).each((i, el)=>{
 			if(this.myNotes.length>0){
@@ -104,7 +110,7 @@ class toDoApp{
 			}
 			if(this.myNotes[i].isDone){
 				$('.delete-done').removeClass('not-available');
-				$('.hide-show').removeClass('hide-button');
+				$('.hide-show').removeClass('hide-el');
 			}
 		})
 	}
