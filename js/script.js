@@ -1,29 +1,25 @@
+/* global $ */
+/* global _ */
 $(()=>{
 // Конструктор заметки
 class Note{
-	constructor(title, text, date){
+	constructor(title, text, date, done = false){
 		this.title = title;
 		this.text = text;
 		this.date = date;
-		this.isDone = false;
+		this.isDone = done;
 	}
 }
 // Конструктор массива
 class NotesArchive extends Array{
-	constructor(){
-		super();
-		if(localStorage.myNotes){
-			$(JSON.parse(localStorage.myNotes)).each((i,item)=> this.push(item));
-		}
-	};
 	renderNote(note){
 		const template = $('#template').html();
 		const compiled = _.template(template);
 		const newElement = compiled(note);
-		$('.output').append(newElement);
+		$('.notes-list').append(newElement);
 	}
 	saveArr(){
-		localStorage.setItem('myNotes', JSON.stringify(this));
+		localStorage.setItem('myNotes', JSON.stringify(this))
 	}
 	push(note){
 		super.push(note);
@@ -32,7 +28,7 @@ class NotesArchive extends Array{
 	}
 	noteIsDone(num, target){
 		this[num].isDone = !this[num].isDone;
-		$(target).text(this[num].isDone ? 'Undone' : 'Done');
+		$(target).attr('title', this[num].isDone ? 'Undone' : 'Done');
 		this.saveArr();
 	}
 	removeNote(num){
@@ -45,7 +41,6 @@ class NotesArchive extends Array{
 		this[num].date = date;
 		note.find('.note-title, .note-body').attr('contenteditable', false);
 		this.saveArr();
-		$(note).find('.date').text(this[num].date);
 	}
 	deleteDoneNotes(){
 		for (let i = this.length-1; i >= 0; i--){
@@ -54,23 +49,16 @@ class NotesArchive extends Array{
 			}
 		}
 	}
-	deleteAllNotes(){
-		for (let i = this.length-1; i >= 0; i--){
-			this.removeNote(i)
-		}
-	}
 	searchNotes(){
-		$($('li')).each((i, el)=>{
-			$(el).addClass('hide-el');
-			if($('.search').val() === ''){
-				$(el).removeClass('hide-el');
-			}
-		});
+		$('li').addClass('hide-el');
+		if($('.search').val() === ''){
+			$('li').removeClass('hide-el')
+		}
 		$(this).each((i, el)=>{
 			if(el.title === $('.search').val()){
-				$($('li')[i]).removeClass('hide-el');
+				$($('li')[i]).removeClass('hide-el')
 			}
-		});
+		})
 	}
 	overlapNote(note){
 		let noteTitleVal = note ? $(note).find('h1').text() : $('.note-title').val();
@@ -91,26 +79,24 @@ class NotesArchive extends Array{
 		return true
 	}
 }
-
 // Конструктор приложения
 class toDoApp{
 	constructor(){
 		this.myNotes = new NotesArchive();
-
-		this.visibilityButtons();
+		if(localStorage.myNotes){
+			$(JSON.parse(localStorage.myNotes)).each((i,item)=> {
+				let note = new Note(item.title, item.text, item.date, item.isDone);
+				this.myNotes.push(note);
+			});
+		}
+		this.visibilityButton();
 		this.eventsInit();
-	};
-	visibilityButtons(){
-		$('.delete-all, .delete-done').addClass('not-available');
-		$('.hide-show').addClass('hide-el');
-
-		$(this.myNotes).each((i, el)=>{
-			if(this.myNotes.length>0){
-				$('.delete-all').removeClass('not-available');
-			}
+	}
+	visibilityButton(){
+		$('.delete-done').addClass('not-available');
+		$(this.myNotes).each(i=>{
 			if(this.myNotes[i].isDone){
-				$('.delete-done').removeClass('not-available');
-				$('.hide-show').removeClass('hide-el');
+				$('.delete-done').removeClass('not-available')
 			}
 		})
 	}
@@ -119,37 +105,37 @@ class toDoApp{
 			if (i < 10) i = '0' + i;
 			return i;
 		};
-		let dayNow = [new Date().getDate(),new Date().getMonth()+1,new Date().getFullYear()].join('/');
+		let dayNow = [new Date().getDate(),new Date().getMonth()+1,new Date().getFullYear()].join('-');
 		let timeNow = [addZero(new Date().getHours()),addZero(new Date().getMinutes())].join(':');
 		return dayNow + ' ' + timeNow
-	};
+	}
 	eventsInit(){
 		// Добавление заметки
 		$('.add').click(()=>{
-			let title = $('.note-title').val();
-			let text = $('.note-body').val();
-			let note = new Note(title, text, this.getDate());
+			let note = new Note($('.note-title').val(), $('.note-body').val(), this.getDate());
 			if(this.myNotes.overlapNote()){
 				this.myNotes.push(note);
-				this.visibilityButtons();
+				this.visibilityButton();
+				$('.note-title').val('');
+				$('.note-body').val('');
 			}
 		});
 		// Действия с заметками
-		$('.output').on('click', e=>{
-			let note = $(e.target).closest('.second-note');
+		$('.notes-list').on('click', e=>{
+			let note = $(e.target).closest('.note');
 			let num = $(note).index();
 			// Пометить, как выделенную / отменить
 			if($(e.target).hasClass('done')){
-				note.toggleClass('ready');
+				note.toggleClass('is-done');
 				this.myNotes.noteIsDone(num, e.target);
-				this.visibilityButtons();
+				this.visibilityButton();
 			}
 			// Удалить заметку
 			if($(e.target).hasClass('delete')){
 				if(confirm('Подтвердите удаление')){
 					note.remove();
 					this.myNotes.removeNote(num);
-					this.visibilityButtons();
+					this.visibilityButton();
 				}
 			}
 			// Редактирование заметки
@@ -161,7 +147,7 @@ class toDoApp{
 			if($(e.target).hasClass('save')){
 				if(this.myNotes.overlapNote(note)){
 					note.removeClass('edit-mod');
-					this.myNotes.saveEdit(num, note, this.getDate())
+					this.myNotes.saveEdit(num, note, this.getDate());
 				}
 			}
 		});
@@ -169,30 +155,25 @@ class toDoApp{
 		$('.delete-done').click(()=>{
 			if(!$('.delete-done').hasClass('not-available') && confirm('Подтвердите удаление')){
 				this.myNotes.deleteDoneNotes();
-				this.visibilityButtons();
-				$('.note-style.ready').remove();
+				this.visibilityButton();
+				$('.note.is-done').remove();
 			}
 		})
-		// Удалить все заметки
-		$('.delete-all').click(()=>{
-			if(!$('.delete-all').hasClass('not-available') && confirm('Подтвердите удаление')){
-				this.myNotes.deleteAllNotes();
-				this.visibilityButtons();
-				$('.second-note').remove();
-			}
+		// Показать поиск
+		$('.open-search').click(()=>{
+			$('.note-create').toggleClass('show-search')
 		})
 		// Поиск
 		$('.search').keyup(()=>{
-			this.myNotes.searchNotes();
+			this.myNotes.searchNotes()
 		})
 		// Показ/скрытие выполненных
 		$('.hide-show').click(()=>{
-			$('.output').toggleClass('hide');
-			$('.hide-show').text($('.output').hasClass('hide') ? 'Show done' : 'Hide done');
+			$('.notes-list').toggleClass('hide');
+			$('.hide-show').toggleClass('fa-eye-slash fa-eye');
 		});
 	}
 }
 
 new toDoApp();
-
-});
+})

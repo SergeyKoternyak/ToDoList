@@ -3,36 +3,38 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Document</title>
+	<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
 	<div class="container">
-		<div class="list-head"></div>
-		<div class="note-create note-style">
-			<input type="text" class="note-title" placeholder="Enter title">
-			<textarea class="note-body" placeholder="Enter text note"></textarea>
-			<div class="buttons control">
-				<div class="add button">+Add task</div>
-				<div class="hide-show button">Show done</div>
-				<div class="delete-done button">Delete done</div>
-				<div class="delete-all button">Delete all</div>
-			</div>
-			<input type="text" class="search" placeholder="⌕ Search">
-		</div>
-		<ul class="output hide"></ul>
+		<header class="note-create">
+			<input type="text" class="search" placeholder="⌕ Search by titel" maxlength="20">
+			<form class="note-form">
+				<input type="text" class="note-title" placeholder="Enter title - 20 symbol max" maxlength="20" required>
+				<input class="note-body" placeholder="Enter note - 200 symbol max" maxlength="200">
+				<div class="add button fa fa-file-text-o" title="Add new note"></div>
+				<div class="open-search button fa fa-search" title="Search"></div>
+				<div class="hide-show button fa fa-eye" title="Hide|Show done notes"></div>
+				<div class="delete-done button fa fa-trash" title="Delete done notes"></div>
+			</form>
+		</header>
+		<ul class="notes-list hide"></ul>
 	</div>
 	<!-- Шаблон -->
 	<script id="template" type="text/template">
-		<li class="second-note note-style <%= (isDone) ? 'ready' : '' %>">
+		<li class="note <%= (isDone) ? 'is-done' : '' %>">
 			<h1 class="note-title" contenteditable="false"><%= title %></h1>
 			<p class="note-body" contenteditable="false"><%= text %></p>
-			<div class="buttons">
-				<div class="done button"><%= (isDone) ? 'Undone' : 'Done' %></div>
-				<div class="edit button">Edit</div>
-				<div class="delete button">Delete</div>
-				<div class="save button">Save</div>
-			</div>
-			<div class="date"><%= date %></div>
+			<footer>
+				<div class="date"><%= date %></div>
+				<div class="buttons">
+					<div class="done button fa fa-check" title="<%= (isDone) ? 'Undone' : 'Done' %>"></div>
+					<div class="edit button fa fa-pencil" title="Edit"></div>
+					<div class="save button fa fa-floppy-o" title="Save"></div>
+					<div class="delete button fa fa-trash" title="Delete"></div>
+				</div>
+			</footer>
 		</li>
 	</script>
 	<!-- Скрипты -->
