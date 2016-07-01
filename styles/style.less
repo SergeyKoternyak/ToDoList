@@ -81,11 +81,10 @@ body {
 	position: relative;
 	margin: 12px 10px;
 	background: linear-gradient(@clrYellow, lighten(@clrYellow, 10%));
-	box-shadow: 8px 8px 10px -5px rgba(0,0,0,0.75);
 	font-family: scrawl;
 	word-wrap: break-word;
 	word-wrap: break-word;
-	&:after {
+	&:before {
 		content: '';
 		display: block;
 		position: absolute;
@@ -98,6 +97,14 @@ body {
 		opacity: .6;
 		transform: rotate(-5deg);
 	}
+	&:after {
+		content: '';
+		position: absolute;
+		bottom: 17px;
+		right: 5px;
+		width: 50%;
+		height: 5px;
+	
 	&:nth-child(odd):after {
 		transform: rotate(5deg);
 	}
