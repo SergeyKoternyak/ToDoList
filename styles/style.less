@@ -52,17 +52,24 @@ body {
 	.search {
 		margin-bottom: 10px;
 	}
+	.menu {
+		display: inline-block;
+		margin-left: 5px;
+		user-select: none;
+	}
 	.button {
 		width: 25px;
 		height: 25px;
 		border: 1px solid @clrBlue;
 		border-radius: 50%;
 		padding: 4px 0;
-		margin-left: 5px;
 		color: @clrBlue;
 		&:hover {
 			background: @clrBlue;
 			color: @clrGrey;
+		}
+		&:not(:first-child) {
+			margin-left: 5px;
 		}
 	}
 }
@@ -100,10 +107,13 @@ body {
 	&:after {
 		content: '';
 		position: absolute;
-		bottom: 17px;
-		right: 5px;
+		bottom: 16px;
+		right: 4px;
 		width: 50%;
 		height: 5px;
+		box-shadow: 0 15px 10px darken(@clrWhite, 90%);
+		transform: rotate(3deg);
+		z-index: -1;
 	}
 	&:nth-child(odd):before {
 		transform: rotate(5deg);
@@ -186,17 +196,19 @@ body {
 	top: 0;
 }
 
-@media screen and (max-width: 710px) {
+@media screen and (max-width: 768px) {
 	.note-create {
-		input{
+		.search,
+		.note-title,
+		.note-body {
 			display: block;
 			margin: 0 auto 10px;
 		}
-		.note-title{
+		.menu {
 			margin: auto;
 		}
 	}
 	.notes-list {
-		padding-top: 150px;
+		padding-top: 160px;
 	}
 }

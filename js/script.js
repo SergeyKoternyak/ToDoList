@@ -158,19 +158,33 @@ class toDoApp{
 				this.visibilityButton();
 				$('.note.is-done').remove();
 			}
-		})
+		});
 		// Показать поиск
 		$('.open-search').click(()=>{
 			$('.note-create').toggleClass('show-search')
-		})
+		});
 		// Поиск
 		$('.search').keyup(()=>{
 			this.myNotes.searchNotes()
-		})
+		});
 		// Показ/скрытие выполненных
 		$('.hide-show').click(()=>{
 			$('.notes-list').toggleClass('hide');
 			$('.hide-show').toggleClass('fa-eye-slash fa-eye');
+		});
+		// Подняться на верх страницы
+		$('.page-up').click(()=>{
+			if($(window).scrollTop() > 0 && $('body').is(':not(:animated)')){
+				$('body').animate({scrollTop: 0}, 1000);
+			}
+		});
+		// Активация кнопки "наверх"
+		$(window).scroll(()=>{
+			if($(window).scrollTop() > 0){
+				$('.page-up').removeClass('not-available')
+			} else{
+				$('.page-up').addClass('not-available')
+			}
 		});
 	}
 }

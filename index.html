@@ -13,10 +13,13 @@
 			<form class="note-form">
 				<input type="text" class="note-title" placeholder="Enter title - 20 symbol max" maxlength="20" required>
 				<input class="note-body" placeholder="Enter note - 200 symbol max" maxlength="200">
-				<div class="add button fa fa-file-text-o" title="Add new note"></div>
-				<div class="open-search button fa fa-search" title="Search"></div>
-				<div class="hide-show button fa fa-eye" title="Hide|Show done notes"></div>
-				<div class="delete-done button fa fa-trash" title="Delete done notes"></div>
+				<ul class="menu">
+					<li class="add button fa fa-file-text-o" title="Add new note"></li>
+					<li class="open-search button fa fa-search" title="Search"></li>
+					<li class="hide-show button fa fa-eye" title="Hide|Show done notes"></li>
+					<li class="delete-done button fa fa-trash" title="Delete done notes"></li>
+					<li class="page-up button fa fa-arrow-up not-available"></li>
+				</ul>
 			</form>
 		</header>
 		<ul class="notes-list hide"></ul>
