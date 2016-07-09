@@ -50,13 +50,13 @@ class NotesArchive extends Array{
 		}
 	}
 	searchNotes(){
-		$('li').addClass('hide-el');
+		$('.note').addClass('hide-el');
 		if($('.search').val() === ''){
-			$('li').removeClass('hide-el')
+			$('.note').removeClass('hide-el')
 		}
 		$(this).each((i, el)=>{
 			if(el.title === $('.search').val()){
-				$($('li')[i]).removeClass('hide-el')
+				$($('.note')[i]).removeClass('hide-el')
 			}
 		})
 	}
