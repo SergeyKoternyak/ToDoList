@@ -1,5 +1,6 @@
 # ToDoList
 ToDoList on JQuery &amp; ES2015
+
 http://sergeykoternyak.github.io/ToDoList/
 
 - `npm install` - install dependencies
